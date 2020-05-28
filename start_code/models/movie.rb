@@ -55,6 +55,13 @@ class Movie
         return Casting.map_data(SqlRunner.run(sql, values))
     end
 
+    def remaining_budget()
+        sql = "SELECT castings.fee FROM castings WHERE id = $1"
+        values = [@id]
+        fee_value = SqlRunner.run(sql, values)[0]['fee'].to_i()
+        return @budget - fee_value
+    end
+
     def self.all()
         sql = "SELECT * FROM movies"
         movies_array_of_hashes = SqlRunner.run(sql)
