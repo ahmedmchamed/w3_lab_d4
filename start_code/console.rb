@@ -3,7 +3,6 @@ require_relative('models/star')
 require_relative('models/movie')
 require_relative('models/casting')
 
-
 Casting.delete_all()
 Movie.delete_all()
 Star.delete_all()

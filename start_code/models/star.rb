@@ -1,5 +1,6 @@
 require_relative("../db/sql_runner")
 require_relative('./movie')
+require_relative('./casting')
 
 class Star
 
@@ -41,6 +42,12 @@ class Star
         sql = "SELECT * FROM stars"
         stars_array_of_hashes = SqlRunner.run(sql)
         return self.map_data(stars_array_of_hashes)
+    end
+
+    def casting()
+        sql = "SELECT * FROM castings WHERE star_id = $1"
+        values = [@id]
+        return Casting.map_data(SqlRunner.run(sql, values))
     end
 
     def movies()

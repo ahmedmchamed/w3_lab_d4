@@ -1,4 +1,6 @@
 require_relative("../db/sql_runner")
+require_relative('./star')
+require_relative('./movie')
 
 class Casting
 
@@ -29,9 +31,25 @@ class Casting
         @id = casting_hash['id'].to_i()
     end
 
+    def movie()
+        sql = "SELECT * FROM movies WHERE id = $1"
+        values = [@movie_id]
+        return Movie.map_data(SqlRunner.run(sql, values))
+    end
+
+    def star()
+        sql = "SELECT * FROM stars WHERE id = $1"
+        values = [@star_id]
+        return Star.map_data(SqlRunner.run(sql, values))
+    end
+
     def self.delete_all()
         sql = "DELETE FROM castings;"
         SqlRunner.run(sql)
+    end
+
+    def self.map_data(casting_hash)
+        return casting_hash.map { |casting| Casting.new(casting) }
     end
 
 end
