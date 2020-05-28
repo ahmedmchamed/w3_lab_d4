@@ -11,24 +11,25 @@ class Movie
         @id = options['id'].to_i() if options['id']
         @title = options['title']
         @genre = options['genre']
+        @budget = options['budget'].to_i()
     end
 
     def save()
         sql ="INSERT INTO movies
-        (title, genre)
+        (title, genre, budget)
         VALUES
-        ($1, $2)
+        ($1, $2, $3)
         RETURNING id"
-        values = [@title, @genre]
-        movie = SqlRunner.run( sql, values ).first
+        values = [@title, @genre, @budget]
+        movie = SqlRunner.run(sql, values).first
         @id = movie['id'].to_i
     end
 
     def update()
         sql = "UPDATE movies SET
-        (title, genre) = ($1, $2)
-        WHERE id = $3"
-        values = [@title, @genre, @id]
+        (title, genre, budget) = ($1, $2, $3)
+        WHERE id = $4"
+        values = [@title, @genre, @budget, @id]
         SqlRunner.run(sql, values)
     end
 

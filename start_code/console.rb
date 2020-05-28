@@ -16,7 +16,8 @@ star1.save()
 
 movie1 = Movie.new({ 
     "title" => "Jurassic Park",
-    "genre" => "Thriller"
+    "genre" => "Thriller",
+    "budget" => 50000000
 })
 
 movie1.save()
