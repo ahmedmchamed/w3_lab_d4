@@ -23,10 +23,15 @@ class Casting
         (
             $1, $2, $3
         )
-        RETURNING id"
+        RETURNING id;"
         values = [@star_id, @movie_id, @fee]
         casting_hash = SqlRunner.run( sql, values ).first()
         @id = casting_hash['id'].to_i()
+    end
+
+    def self.delete_all()
+        sql = "DELETE FROM castings;"
+        SqlRunner.run(sql)
     end
 
 end

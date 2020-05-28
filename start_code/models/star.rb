@@ -21,10 +21,15 @@ class Star
         (
             $1, $2
         )
-        RETURNING id"
+        RETURNING id;"
         values = [@first_name, @last_name]
         star = SqlRunner.run( sql, values ).first
         @id = star['id'].to_i
+    end
+
+    def self.delete_all()
+        sql = "DELETE FROM stars;"
+        SqlRunner.run(sql)
     end
 
 end
