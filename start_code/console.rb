@@ -9,13 +9,23 @@ star1 = Star.new({
     "last_name" => "Goldblum"
 })
 
+star1.save()
+
 movie1 = Movie.new({ 
     "title" => "Jurassic Park",
     "genre" => "Thriller"
 })
 
-star1.save()
 movie1.save()
+
+casting1 = Casting.new({
+    "star_id" => star1.id,
+    "movie_id" => movie1.id,
+    "fee" => 10000000
+})
+
+casting1.save()
+
 
 binding.pry
 
