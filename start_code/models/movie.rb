@@ -22,6 +22,20 @@ class Movie
         @id = movie['id'].to_i
     end
 
+    def update()
+        sql = "UPDATE movies SET
+        (title, genre) = ($1, $2)
+        WHERE id = $3"
+        values = [@title, @genre, @id]
+        SqlRunner.run(sql, values)
+    end
+
+    def delete()
+        sql = "DELETE FROM movies WHERE id = $1"
+        values = [@id]
+        SqlRunner.run(sql, values)
+    end
+
     def stars()
         sql = "SELECT stars.* FROM stars
         INNER JOIN castings ON 
@@ -30,6 +44,12 @@ class Movie
         values = [@id]
         stars_hash = SqlRunner.run(sql, values).first()
         return stars_hash.map { |star| Star.new(stars_hash) }
+    end
+
+    def self.all()
+        sql = "SELECT * FROM movies"
+        movies_array_of_hashes = SqlRunner.run(sql)
+        return self.map_data(movies_array_of_hashes)
     end
 
     def self.delete_all()
