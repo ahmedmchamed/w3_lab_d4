@@ -2,7 +2,7 @@ require_relative("../db/sql_runner")
 
 class Star
 
-    attr_reader :casting_id, :id
+    attr_reader :id
     attr_accessor :first_name, :last_name
 
     def initialize( options )
@@ -13,23 +13,42 @@ class Star
 
     def save()
         sql = "INSERT INTO stars
-        (
-            first_name,
-            last_name
-        )
+        (first_name, last_name)
         VALUES
-        (
-            $1, $2
-        )
+        ($1, $2)
         RETURNING id;"
         values = [@first_name, @last_name]
         star = SqlRunner.run( sql, values ).first
         @id = star['id'].to_i
     end
 
+    def update()
+        sql = "UPDATE stars SET
+        (first_name, last_name) = ($1, $2)
+        WHERE id = $3"
+        values = [@first_name, @last_name, @id]
+        SqlRunner.run(sql, values)
+    end
+
+    def delete()
+        sql = "DELETE FROM stars WHERE id = $1"
+        values = [@id]
+        SqlRunner.run(sql, values)
+    end
+
+    def self.all()
+        sql = "SELECT * FROM stars"
+        stars_array_of_hashes = SqlRunner.run(sql)
+        return self.map_data(stars_array_of_hashes)
+    end
+
     def self.delete_all()
         sql = "DELETE FROM stars;"
         SqlRunner.run(sql)
+    end
+
+    def self.map_data(stars_hash)
+        return stars_hash.map { |star| Star.new(star) }
     end
 
 end

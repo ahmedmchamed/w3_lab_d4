@@ -2,7 +2,7 @@ require_relative('../db/sql_runner')
 
 class Movie
 
-    attr_reader :casting_id, :id
+    attr_reader :id
     attr_accessor :title, :genre
 
     def initialize(options)
@@ -13,14 +13,9 @@ class Movie
 
     def save()
         sql ="INSERT INTO movies
-        (
-           title,
-           genre
-        )
+        (title, genre)
         VALUES
-        (
-           $1, $2
-        )
+        ($1, $2)
         RETURNING id"
         values = [@title, @genre]
         movie = SqlRunner.run( sql, values ).first
@@ -40,5 +35,9 @@ class Movie
     def self.delete_all()
         sql = "DELETE FROM movies"
         SqlRunner.run(sql)
+    end
+
+    def self.map_data(movies_hash)
+        return movies_hash.map { |movie| Movie.new(movie) }
     end
 end
