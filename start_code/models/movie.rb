@@ -9,7 +9,22 @@ class Movie
         @id = options['id'].to_i() if options['id']
         @title = options['title']
         @genre = options['genre']
-        @casting_id = options['casting_id'].to_i()
+    end
+
+    def save()
+        sql ="INSERT INTO movies
+        (
+           title,
+           genre
+        )
+        VALUES
+        (
+           $1, $2
+        )
+        RETURNING id"
+        values = [@title, @genre]
+        movie = SqlRunner.run( sql, values ).first
+        @id = movie['id'].to_i
     end
 
 end
