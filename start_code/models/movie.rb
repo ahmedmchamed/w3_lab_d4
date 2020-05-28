@@ -1,4 +1,5 @@
 require_relative('../db/sql_runner')
+require_relative('./star')
 
 class Movie
 
@@ -42,8 +43,8 @@ class Movie
         castings.star_id = stars.id 
         WHERE movie_id = $1;"
         values = [@id]
-        stars_hash = SqlRunner.run(sql, values).first()
-        return stars_hash.map { |star| Star.new(stars_hash) }
+        stars_array_of_hashes = SqlRunner.run(sql, values)
+        return Star.map_data(stars_array_of_hashes)
     end
 
     def self.all()

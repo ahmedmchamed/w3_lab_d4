@@ -1,4 +1,5 @@
 require_relative("../db/sql_runner")
+require_relative('./movie')
 
 class Star
 
@@ -40,6 +41,16 @@ class Star
         sql = "SELECT * FROM stars"
         stars_array_of_hashes = SqlRunner.run(sql)
         return self.map_data(stars_array_of_hashes)
+    end
+
+    def movies()
+        sql = "SELECT movies.* FROM movies
+        INNER JOIN castings ON
+        castings.movie_id = movies.id
+        WHERE star_id = $1"
+        values = [@id]
+        movies_array_of_hashes = SqlRunner.run(sql, values)
+        return Movie.map_data(movies_array_of_hashes)
     end
 
     def self.delete_all()
